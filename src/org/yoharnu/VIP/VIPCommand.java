@@ -1,8 +1,5 @@
 package org.yoharnu.VIP;
 
-import java.util.List;
-
-
 import org.bukkit.entity.Player;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -18,6 +15,10 @@ public class VIPCommand implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command command,
 			String label, String[] args) {
+		if (!(sender instanceof Player)){
+			sender.sendMessage("You cannot do that from the console.");
+			return true;
+		}
 		if (!sender.isOp()){
 			sender.sendMessage("You do not have permission to do that.");
 			return true;
@@ -29,27 +30,16 @@ public class VIPCommand implements CommandExecutor {
 			return false;
 		}
 		String playerName = args[1];
-		List<Player> Matches = plugin.getServer().matchPlayer(playerName);
-		if(Matches.size()==0){
-			sender.sendMessage("That player is not online.");
-			return true;
-		}
-		if(Matches.size()>1){
-			sender.sendMessage("There is more than one player by that name.");
-			return true;
-		}
-		Player player = Matches.get(0);
 		String action = args[0];
-		boolean vip = plugin.getConfig().getBoolean("VIPs." + player.getName(), false);
+		boolean vip = plugin.getConfig().getBoolean("VIPs." + playerName, false);
 		if(action.equalsIgnoreCase("add")){
 			if(vip){
 				sender.sendMessage("That player is already a VIP.");
 				return true;
 			}
-			plugin.getConfig().setProperty("VIPs." + player.getName(), true);
+			plugin.getConfig().setProperty("VIPs." + playerName, true);
 			plugin.getConfig().save();
-			sender.sendMessage(player.getName() + " is now a VIP.");
-			player.sendMessage(((Player)sender).getName() + " gave you VIP status!");
+			sender.sendMessage(playerName + " is now a VIP.");
 			return true;
 		}
 		else if(action.equalsIgnoreCase("remove")){
@@ -57,12 +47,10 @@ public class VIPCommand implements CommandExecutor {
 				sender.sendMessage("That player is not a VIP.");
 				return true;
 			}
-			plugin.getConfig().removeProperty("VIPs." + player.getName());
+			plugin.getConfig().removeProperty("VIPs." + playerName);
 			plugin.getConfig().save();
-			sender.sendMessage(player.getName() + " is no longer a VIP.");
-			player.sendMessage(((Player)sender).getName() + " revoked your VIP status!");
+			sender.sendMessage(playerName + " is no longer a VIP.");
 		}
-
 		return true;
 	}
 
