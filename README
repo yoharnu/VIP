@@ -1,0 +1,10 @@
+name: VIP
+main: org.yoharnu.VIP.VIP
+versioni: 0.1
+author: Yoharnu
+commands:
+   vip:
+    description: edit VIP list
+    usage: |
+           /vip <add/remove> <player>
+	   Example: /vip add Player - add Player to the VIP list
