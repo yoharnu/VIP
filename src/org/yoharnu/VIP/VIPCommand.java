@@ -23,10 +23,6 @@ public class VIPCommand implements CommandExecutor {
 		}
 		permissions = plugin.permissions;
 		Player player = (Player) sender;
-		/*if (!(permissions.canAddPlayer(player) || permissions.canRemovePlayer(player) || permissions.canEnable(player) || permissions.canDisable(player))){
-			sender.sendMessage("You do not have permission to do that.");
-			return true;
-		}*/
 		if (args.length==1){
 			if(args[0].equalsIgnoreCase("enable") && !plugin.getConfig().getBoolean("enabled", true)){
 				if(permissions.canEnable(player)){
