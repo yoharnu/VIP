@@ -1,6 +1,6 @@
 name: VIP
 main: org.yoharnu.VIP.VIP
-versioni: 0.1
+versioni: 0.2
 author: Yoharnu
 permissions: VIP.add        = allows player to add    a player to   the VIP list
              VIP.remove     = allows player to remove a player from the VIP list
