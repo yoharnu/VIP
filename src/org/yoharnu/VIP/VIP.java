@@ -23,6 +23,7 @@ public class VIP extends JavaPlugin {
 	// Links the VIPPlayerListener
 	private final VIPPlayerListener playerListener = new VIPPlayerListener(this);
 	private Configuration configuration;
+	public VIPPermissions permissions;
 
 	@Override
 	public void onDisable() {
@@ -33,6 +34,7 @@ public class VIP extends JavaPlugin {
 	public void onEnable() {
 		
 		configuration = getConfiguration();
+		permissions = new VIPPermissions(this);
 
 		// Create the pluginmanager
 		PluginManager pm = getServer().getPluginManager();
@@ -54,6 +56,14 @@ public class VIP extends JavaPlugin {
 		System.out.println(pdfFile.getName() + " version "
 				+ pdfFile.getVersion() + " is enabled!");
 		
+		if(configuration.getBoolean("enabled", true)){
+			configuration.setProperty("enabled", true);
+			configuration.save();
+		}
+		if(configuration.getBoolean("Kick last logged", true)){
+			configuration.setProperty("Kick last logged", true);
+			configuration.save();
+		}
 		
 	}
 

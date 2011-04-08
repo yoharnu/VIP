@@ -23,6 +23,9 @@ public class VIPPlayerListener extends PlayerListener {
 
 	@Override
 	public void onPlayerLogin(PlayerLoginEvent event){
+		if(!plugin.getConfig().getBoolean("enabled", true)){
+			return;
+		}
 		if(plugin.getServer().getOnlinePlayers().length<plugin.getServer().getMaxPlayers()){
 			event.setResult(Result.ALLOWED);
 			return;
@@ -55,7 +58,10 @@ public class VIPPlayerListener extends PlayerListener {
 		for(int i=1; i<options.size(); i++){
 			int iLoginTime =  plugin.getConfig().getInt("DO NOT EDIT -- Login times." + options.get(i).getName(), 0);
 			int kickLoginTime = plugin.getConfig().getInt("DO NOT EDIT -- Login times." + options.get(kick).getName(), 0);
-			if(iLoginTime>kickLoginTime){
+			if(iLoginTime>kickLoginTime && plugin.getConfig().getBoolean("Kick last logged", true)){
+				kick=i;
+			}
+			else if(iLoginTime<kickLoginTime && !plugin.getConfig().getBoolean("Kick last logged", true)){
 				kick=i;
 			}
 		}

@@ -2,9 +2,15 @@ name: VIP
 main: org.yoharnu.VIP.VIP
 versioni: 0.1
 author: Yoharnu
+permissions: VIP.add        = allows player to add    a player to   the VIP list
+             VIP.remove     = allows player to remove a player from the VIP list
+	     VIP.enable     = allows player to enable  VIP
+	     VIP.disable    = allows player to disable VIP
+	     VIP.toggleKick = allows player to toggle whether most recently logged or longest logged gets kicked when a VIP signs in
 commands:
    vip:
     description: edit VIP list
     usage: |
            /vip <add/remove> <player>
-	   Example: /vip add Player - add Player to the VIP list
+	   /vip <enable/disable/kick>
+	   Example: /vip kick - toggles whether to kick most recently logged or longest logged player when a VIP signs in
