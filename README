@@ -1,6 +1,6 @@
 name: VIP
 main: org.yoharnu.VIP.VIP
-versioni: 0.3
+versioni: 0.4
 author: Yoharnu
 permissions: VIP.add        = allows player to add    a player to   the VIP list
              VIP.remove     = allows player to remove a player from the VIP list
@@ -12,5 +12,6 @@ commands:
     description: edit VIP list
     usage: |
            /vip <add/remove> <player>
-	   /vip <enable/disable/kick>
+	   /vip <enable/disable/kick/permissions>
 	   Example: /vip kick - toggles whether to kick most recently logged or longest logged player when a VIP signs in
+	   Example: /vip permissions - toggles whether or not to use permissions for the VIP list
