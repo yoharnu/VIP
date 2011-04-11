@@ -12,6 +12,7 @@ public class VIPCommand implements CommandExecutor {
 
 	VIPCommand(VIP plugin){
 		this.plugin = plugin;
+		permissions=plugin.permissions;
 	}
 
 	@Override
@@ -21,7 +22,6 @@ public class VIPCommand implements CommandExecutor {
 			sender.sendMessage("You cannot do that from the console.");
 			return true;
 		}
-		permissions = plugin.permissions;
 		Player player = (Player) sender;
 		if (args.length==1){
 			if(args[0].equalsIgnoreCase("enable") && !plugin.getConfig().getBoolean("enabled", true)){
@@ -77,6 +77,17 @@ public class VIPCommand implements CommandExecutor {
 				}
 				return true;
 			}
+			else if(args[0].equalsIgnoreCase("permissions")){
+				if(player.isOp()){
+					plugin.getConfig().setProperty("Use permissions for VIP list", !plugin.getConfig().getBoolean("Use permissions for VIP list", false));
+					plugin.getConfig().save();
+					sender.sendMessage("\"Use permissions for VIP list\" is now set to: " + plugin.getConfig().getString("Use permissions for VIP list"));
+				}
+				else{
+					sender.sendMessage("You do not have permission to do that.");
+				}
+				return true;
+			}
 		}
 		if(!plugin.getConfig().getBoolean("enabled", true)){
 			return true;
@@ -87,37 +98,51 @@ public class VIPCommand implements CommandExecutor {
 		else if(!(args[0].equalsIgnoreCase("add") || args[0].equalsIgnoreCase("remove"))){
 			return false;
 		}
-		String playerName = args[1];
+		String addRemove = args[1];
 		String action = args[0];
-		boolean vip = plugin.getConfig().getBoolean("VIPs." + playerName, false);
 		if(action.equalsIgnoreCase("add")){
-			if(permissions.canAddPlayer(player)){
-				if(vip){
-					sender.sendMessage("That player is already a VIP.");
+			if(!permissions.canAddPlayer(player)){
+				sender.sendMessage("You do not have permission to do that.");
+			}
+			if(!plugin.getConfig().getBoolean("Use permissions for VIP list", false)){
+				int priority = 1;
+				if(args.length==3){
+					try{
+						priority = Integer.parseInt(args[2].trim());
+					}
+					catch (NumberFormatException e){
+						return false;
+					}
+				}
+				if(priority<1){
+					sender.sendMessage("Priority must be positive");
 					return true;
 				}
-				plugin.getConfig().setProperty("VIPs." + playerName, true);
+				plugin.getConfig().setProperty("VIPs." + addRemove, priority);
 				plugin.getConfig().save();
-				sender.sendMessage(playerName + " is now a VIP.");
+				sender.sendMessage(addRemove + " is now a VIP with priority " + priority);
 			}
 			else{
-				sender.sendMessage("You do not have permission to do that.");
+				sender.sendMessage("VIP is using permissions. Add players manually.");
 			}
 			return true;
 		}
 		else if(action.equalsIgnoreCase("remove")){
-			if(permissions.canRemovePlayer(player)){
-				if(!vip){
-					sender.sendMessage("That player is not a VIP.");
-					return true;
-				}
-				plugin.getConfig().removeProperty("VIPs." + playerName);
-				plugin.getConfig().save();
-				sender.sendMessage(playerName + " is no longer a VIP.");
-			}
-			else{
+			if(!permissions.canRemovePlayer(player)){
 				sender.sendMessage("You do not have permission to do that.");
 			}
+			else if(!plugin.getConfig().getBoolean("Use permissions for VIP list", false)){
+				plugin.getConfig().removeProperty("VIPs." + addRemove);
+				if(plugin.getConfig().getString("VIPs")=="{}"){
+					plugin.getConfig().removeProperty("VIPs");
+				}
+				plugin.getConfig().save();
+			}
+			else{
+				sender.sendMessage("VIP is using permissions. Remove players manually.");
+				return true;
+			}
+			sender.sendMessage(addRemove + " is no longer a VIP.");
 		}
 		return true;
 	}

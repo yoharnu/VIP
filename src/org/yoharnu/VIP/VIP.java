@@ -35,6 +35,13 @@ public class VIP extends JavaPlugin {
 		
 		configuration = getConfiguration();
 		permissions = new VIPPermissions(this);
+		
+		if(permissions!=null && configuration.getBoolean("Use permissions for VIP list", false)){
+			configuration.setProperty("Use permissions for VIP list", true);
+		}
+		else{
+			configuration.setProperty("Use permissions for VIP list", false);
+		}
 
 		// Create the pluginmanager
 		PluginManager pm = getServer().getPluginManager();
@@ -58,13 +65,11 @@ public class VIP extends JavaPlugin {
 		
 		if(configuration.getBoolean("enabled", true)){
 			configuration.setProperty("enabled", true);
-			configuration.save();
 		}
 		if(configuration.getBoolean("Kick last logged", true)){
 			configuration.setProperty("Kick last logged", true);
-			configuration.save();
 		}
-		
+		configuration.save();		
 	}
 
 	public Configuration getConfig() {

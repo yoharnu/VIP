@@ -31,7 +31,7 @@ public class VIPPlayerListener extends PlayerListener {
 			return;
 		}
 		Player player = event.getPlayer();
-		if(!isVIP(player)){
+		if(plugin.permissions.isVIP(player.getName())==0){
 			event.setResult(Result.KICK_FULL);
 			return;
 		}
@@ -39,7 +39,7 @@ public class VIPPlayerListener extends PlayerListener {
 		LinkedList<Player> options = new LinkedList<Player>();
 		int it=0;
 		for(int i=0; i<online.length; i++){
-			if(!isVIP(online[i])){
+			if(plugin.permissions.isVIP(online[i].getName())<plugin.permissions.isVIP(player.getName())){
 				options.add(online[i]);
 				it++;
 			}
@@ -82,11 +82,10 @@ public class VIPPlayerListener extends PlayerListener {
 	public void onPlayerQuit(PlayerQuitEvent event){
 		Player player = event.getPlayer();
 		plugin.getConfig().removeProperty("DO NOT EDIT -- Login times." + player.getName());
+		if(plugin.getConfig().getString("DO NOT EDIT -- Login times")=="{}"){
+			plugin.getConfig().removeProperty("DO NOT EDIT -- Login times");
+		}
 		plugin.getConfig().save();
 		return;
-	}
-
-	private boolean isVIP(Player player) {
-		return plugin.getConfig().getBoolean("VIPs." + player.getName(), false);
 	}
 }
