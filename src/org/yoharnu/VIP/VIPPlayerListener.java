@@ -27,7 +27,7 @@ public class VIPPlayerListener extends PlayerListener {
 			return;
 		}
 		if(plugin.getServer().getOnlinePlayers().length<plugin.getServer().getMaxPlayers()){
-			event.setResult(Result.ALLOWED);
+			//event.setResult(Result.ALLOWED);
 			return;
 		}
 		Player player = event.getPlayer();
