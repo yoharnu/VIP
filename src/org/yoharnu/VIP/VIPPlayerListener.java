@@ -38,19 +38,22 @@ public class VIPPlayerListener extends PlayerListener {
 		Player online[] = plugin.getServer().getOnlinePlayers();
 		LinkedList<Player> options = new LinkedList<Player>();
 		int it=0;
-		for(int i=0; i<online.length; i++){
-			if(plugin.permissions.isVIP(online[i].getName())<plugin.permissions.isVIP(player.getName())){
-				options.add(online[i]);
-				it++;
+		int p = 0;
+		while(it==0 && p<plugin.permissions.isVIP(player.getName())){
+			for(int i=0; i<online.length; i++){
+				if(plugin.permissions.isVIP(online[i].getName())==p){
+					options.add(online[i]);
+					it++;
+				}
 			}
+			p++;
 		}
 		if(it==0){
 			event.setResult(Result.KICK_FULL);
-			event.setKickMessage("Server is full (all VIPs)");
 			return;
 		}
 		if(it==1){
-			options.get(it-1).kickPlayer("Server is full. A VIP signed in.");
+			options.get(0).kickPlayer("Server is full. A VIP signed in.");
 			event.setResult(Result.ALLOWED);
 			return;
 		}
